@@ -1,3 +1,6 @@
+library(plyr)         # Needs to be loaded before tidyverse
+library(tidyverse)
+
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
                       conf.interval=.95, .drop=TRUE) {
     # New version of length which can handle NA's: if na.rm==T, don't count them
