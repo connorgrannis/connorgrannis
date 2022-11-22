@@ -1,0 +1,32 @@
+
+Sub BionicReading()
+
+'select the whole document and get the word count
+Selection.WholeStory
+num_words = Selection.Words.Count 'this includes spaces.
+
+'GoTo Start of the Document
+Selection.HomeKey unit:=wdStory
+
+'initialize counter
+w = 1
+'start the loop
+Do Until w = num_words
+    Selection.MoveRight unit:=wdWord, Count:=1, Extend:=True
+    'MsgBox (Len(Selection))
+    If Len(Selection) <= 3 Then
+        'next word
+    Else
+        'divide by 2
+        chars = Len(Selection) / 2
+        Selection.MoveLeft unit:=wdCharacter, Count:=chars, Extend:=wdExtend
+        Selection.Font.Bold = wdToggle
+    End If
+    'move to next word
+    Selection.MoveRight unit:=wdWord, Count:=1
+    'increase the counter
+    w = w + 1
+'end the loop
+Loop
+
+End Sub
