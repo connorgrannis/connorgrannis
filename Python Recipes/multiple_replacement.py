@@ -1,3 +1,5 @@
+import re
+
 class Xlator(dict):
     """ Pronounced translator. All-in-one multiple-string-substitution class """
     def _make_regex(self):
