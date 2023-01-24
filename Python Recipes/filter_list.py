@@ -1,5 +1,5 @@
 import re
-from functools import compress
+from itertools import compress
 def filter_list(needle, haystack):
     m = re.compile(needle)
     matches = list(map(lambda x: m.match(x), haystack))
