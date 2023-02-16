@@ -36,12 +36,17 @@ class SQL:
             print("Query error")
             result = None
         return result
+    # Run a query and immediately display the results
+    def quick_query(self, query_string):
+        """ this is temporary. Just a look. it's not saved anywhere"""
+        result = self.run_query(query_string)
+        self.print_result(result)
     # Replace text \n and \t with actual newline and tab characters.
     def clean_string(self, strng):
         """ cleans up the query output """
         return str(strng).replace('\\n', '\n').replace('\\t', '\t')
     # Print query results up to a specified max number of records).
-    def print_result(self, result, max_num_records):
+    def print_result(self, result, max_num_records=10):
         """ turns the results of a query into a dataframe and only returns a specified number of rows and
         Could modify to return df also and get rid of the other function?
         """
@@ -62,7 +67,7 @@ class SQL:
         result = self.run_query('SELECT sql from sqlite_master where name= "' + table_or_view_name + '"')
         print("\nSCHEMA: " + table_or_view_name)
         print(self.clean_string(result.fetchall()))
-    def print_table_or_view(self, table_name, max_num_records):
+    def print_table_or_view(self, table_name, max_num_records=10):
         """ uses the `print_result` function to quickly display the results of a query as a DataFrame """
         print("\nTABLE OR VIEW: " + table_name)
         result = self.run_query('SELECT * FROM "' + table_name + '"')
@@ -114,6 +119,9 @@ conn.print_schema('demo')
 
 # run a query
 result = conn.run_query("""select age from demo where study = 'sce' """)
+
+# quick query
+conn.quick_query("""select age from demo where study = 'sce' """)
 
 # print the result
 conn.print_result(conn.result, max_num_records=5)
