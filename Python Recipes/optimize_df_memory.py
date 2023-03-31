@@ -49,3 +49,41 @@ def optimize(df: pd.DataFrame, datetime_features: List[str] = []):
 # this modifies in place, so perform optimization on a copy if you want to retain original
 # but this defeats the purpose of memory optimization
 _ = optimize(df, ["col_that_is_a_date"])
+
+
+
+############ Below is a class version of these functions
+class OptimizedDataFrame(pd.DataFrame):
+    def optimize_floats(self) -> pd.DataFrame:
+        floats = self.select_dtypes(include=['float64']).columns.tolist()
+        self[floats] = self[floats].apply(pd.to_numeric, downcast='float')
+        return self
+    def optimize_ints(self) -> pd.DataFrame:
+        ints = self.select_dtypes(include=['int64']).columns.tolist()
+        self[ints] = self[ints].apply(pd.to_numeric, downcast='integer')
+        return self
+    def optimize_objects(self, datetime_features: List[str]) -> pd.DataFrame:
+        for col in self.select_dtypes(include=['object']):
+            if col not in datetime_features:
+                if not (type(self[col][0])==list):
+                    num_unique_values = len(self[col].unique())
+                    num_total_values = len(self[col])
+                    if float(num_unique_values) / num_total_values < 0.5:
+                        # get rid of hyphens
+                        try:
+                            self[col] = list(map(lambda x: Xlator({"-": " "}).xlat(x), self[col]))
+                        except TypeError:
+                            pass
+                        self[col] = self[col].astype('category')
+            else:
+                self[col] = pd.to_datetime(self[col])
+        return self
+    def optimize(self, datetime_features: List[str] = []) -> pd.DataFrame:
+        return self.optimize_floats().optimize_ints().optimize_objects(datetime_features)
+
+df = pd.DataFrame({'A': [1, 2, 3], 'B': [4.0, 5.0, 6.0], 'C': ['foo', 'bar', 'baz']})
+print(df.memory_usage().sum())
+df = OptimizedDataFrame(df)
+_ = df.optimize()
+print(df.memory_usage().sum())
+
