@@ -82,8 +82,10 @@ class OptimizedDataFrame(pd.DataFrame):
         return self.optimize_floats().optimize_ints().optimize_objects(datetime_features)
 
 df = pd.DataFrame({'A': [1, 2, 3], 'B': [4.0, 5.0, 6.0], 'C': ['foo', 'bar', 'baz']})
-print(df.memory_usage().sum())
+
+orig_mem = df.memory_usage().sum()
 df = OptimizedDataFrame(df)
-_ = df.optimize()
-print(df.memory_usage().sum())
+_ = df.optimize()     # suppress output
+opt_mem = df.memory_usage().sum()
+print(f"Memory usage reduced by {round(((orig_mem-opt_mem)/orig_mem)*100, 2)}%")
 
