@@ -18,3 +18,10 @@ get.sentence <- function(res_df) {
   return(glue("F({get.results(res_df, 'Df', 'Group')},{get.results(res_df, 'Df', 'Residuals')})={round(as.double(get.results(res_df, 'F.value', 'Group')), 3)}, p={round(as.double(get.results(res_df, 'Pr..F.', 'Group')), 3)}, eta={round(get.eta(res_df), 3)}."))
 }
 
+# t-test
+t_report <- function(res) {
+    print(glue("t({round(res$parameter, 2)})={round(res$statistic, 2)}, p={round(res$p.value, 4)}"))
+    return(res)
+}
+
+# full <- t_report(t.test(tot_full ~ Group, data=df))
