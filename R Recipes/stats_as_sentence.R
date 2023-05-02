@@ -20,7 +20,8 @@ get.sentence <- function(res_df) {
 
 # t-test
 t_report <- function(res) {
-    print(glue("t({round(res$parameter, 2)})={round(res$statistic, 2)}, p={round(res$p.value, 4)}"))
+    p <- ifelse(res$p.value < 0.001, "<0.001", glue("={as.character(round(res$p.value, 4))}"))
+    print(glue("t({round(res$parameter, 2)})={round(res$statistic, 2)}, p{p}"))
     return(res)
 }
 
