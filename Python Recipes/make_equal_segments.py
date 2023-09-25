@@ -19,3 +19,4 @@ def divide_vector(vector, x=100, take_mean=False):
     return segments
 
 # divide_vector(np.arange(30), 4, take_mean=True)
+# np.array_split(v, 4)    # spreads the remainders out starting at the beginning instead of putting all of them at the end
